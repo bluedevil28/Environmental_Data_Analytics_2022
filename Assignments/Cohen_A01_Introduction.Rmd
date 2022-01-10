@@ -1,0 +1,42 @@
+---
+title: "Assignment 1: Introduction"
+author: "Laurel Cohen"
+output: pdf_document
+geometry: margin=2.54cm
+---
+
+## OVERVIEW
+
+This exercise accompanies the introductory material in Environmental Data Analytics. 
+
+## Directions
+1. Change "Student Name" on line 3 (above) with your name.
+3. Work through the steps, **creating code and output** that fulfill each instruction.
+4. Be sure to **answer the questions** in this assignment document.
+6. When you have completed the assignment, **Knit** the text and code into a single PDF file.
+8. After Knitting, submit the completed exercise (PDF file) to the dropbox in Sakai. Add your last name into the file name (e.g., "Lima_A01_Introduction.Rmd") prior to submission.
+
+The completed exercise is due on <>.
+
+## 1) Discussion Questions
+
+1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
+
+> Answer: I studied Economics in college and used Stata to do some econometrics, I have used Excel for many years for basic data cleaning and visualization, and I got my first exposure to R in fall 2020 when I took the Statistics course at the Nicholas School in fall 2020.  I have no experience with Git.
+
+2. Are there any components of the course about which you feel confident?
+
+> Answer: I felt like I was decent at R in the Nic School Stats course, so while I'm far from proficient in the program, I think that with attention to detail and a good work ethic, I can make a lot of progress in learning the software in this class.
+
+3. Are there any components of the course about which you feel apprehensive?
+
+> Answer: Given that I have never done any type of coding beyond bolding fonts on my old MySpace profile, I am a little nervous about Python!  I also have heard that time series analysis is a pretty difficult topic, so I have some trepidation about that as well.
+
+
+## 2) GitHub
+
+Provide a link below to your forked course repository in GitHub. Make sure you have pulled all recent changes from the course repository  and that you have updated your course README file. 
+
+> Answer: https://github.com/bluedevil28/Environmental_Data_Analytics_2022
+
+
