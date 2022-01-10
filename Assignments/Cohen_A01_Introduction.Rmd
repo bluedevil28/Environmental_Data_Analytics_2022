@@ -22,11 +22,11 @@ The completed exercise is due on <>.
 
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
-> Answer: I studied Economics in college and used Stata to do some econometrics, I have used Excel for many years for basic data cleaning and visualization, and I got my first exposure to R in fall 2020 when I took the Statistics course at the Nicholas School in fall 2020.  I have no experience with Git.
+> Answer: I studied Economics in college and used Stata for econometrics, I have used Excel for many years for basic data cleaning and visualization, and I got my first exposure to R in fall 2020 when I took the Statistics course at the Nicholas School.  I have no experience with Git.
 
 2. Are there any components of the course about which you feel confident?
 
-> Answer: I felt like I was decent at R in the Nic School Stats course, so while I'm far from proficient in the program, I think that with attention to detail and a good work ethic, I can make a lot of progress in learning the software in this class.
+> Answer: I felt like I was decent at R in the graduate Stats course, so while I'm far from proficient in the program, I think that with attention to detail and a good work ethic, I can make a lot of progress in learning the software in this class.
 
 3. Are there any components of the course about which you feel apprehensive?
 
