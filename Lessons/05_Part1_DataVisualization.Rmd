@@ -74,6 +74,8 @@ Here are some commonly used aesthetic types that can be manipulated in ggplot:
 * size
 * transparency
 
+If you have one variable, can define aesthetics on the same line; if more than one, put the aesthetics arguments into the geom line (not the first ggplot one).
+
 ### Plotting continuous variables over time: Scatterplot and Line Plot
 
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
@@ -207,7 +209,7 @@ print(Nutrientplot7)
 # Ridgeline plot
 Nutrientplot6 <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(y = nutrient, x = concentration)) +
-  geom_density_ridges(aes(fill = lakename), alpha = 0.5) #
+  geom_density_ridges(aes(fill = lakename), alpha = 0.5) #alpha means transparency of the points
 print(Nutrientplot6)
 
 

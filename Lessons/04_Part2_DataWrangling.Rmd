@@ -118,7 +118,7 @@ In many cases, we will want to combine datasets into one dataset. If all column 
 
 In dplyr, there are several types of join functions: 
 
-[[Only use r bind and c bind if you're positive all the slots match--all the rows match if using c bind or all the columns match if using r bind]]
+[[Only use r bind and c bind if you're positive all the slots match--all the rows match if using c bind or all the columns match if using r]]
 
 * `inner_join`: return rows in x where there are matching values in y, and all columns in x and y (mutating join).
 * `semi_join`: return all rows from x where there are matching values in  y, keeping just columns from x (filtering join).
