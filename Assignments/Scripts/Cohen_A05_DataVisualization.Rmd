@@ -1,0 +1,138 @@
+---
+title: "Assignment 5: Data Visualization"
+author: "Laurel Cohen"
+output: pdf_document
+geometry: margin=2.54cm
+editor_options: 
+  chunk_output_type: console
+---
+
+## OVERVIEW
+
+This exercise accompanies the lessons in Environmental Data Analytics on Data Visualization 
+
+## Directions
+1. Change "Student Name" on line 3 (above) with your name.
+2. Work through the steps, **creating code and output** that fulfill each instruction.
+3. Be sure to **answer the questions** in this assignment document.
+4. When you have completed the assignment, **Knit** the text and code into a single PDF file.
+5. After Knitting, submit the completed exercise (PDF file) to the dropbox in Sakai. Add your last name into the file name (e.g., "Fay_A05_DataVisualization.Rmd") prior to submission.
+
+The completed exercise is due on Monday, February 14 at 7:00 pm.
+
+
+
+## Set up your session 
+1. Set up your session. Verify your working directory and load the tidyverse 
+and cowplot packages. Upload the NTL-LTER processed data files for nutrients 
+and chemistry/physics for Peter and Paul Lakes (use the tidy 
+[`NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv`] version) and 
+the processed data file for the Niwot Ridge litter dataset (use the [`NEON_NIWO_Litter_mass_trap_Processed.csv`] version). 
+
+2. Make sure R is reading dates as date format; if not change the format to date.
+
+```{r}
+#1 
+getwd()
+library(tidyverse)
+library(cowplot)
+PeterPaul.chem.physics <- 
+  read.csv("/Users/Laurel/Documents/Information to Keep/Graduate School/Second Year/Second Semester/Environmental Data Analytics/Environmental_Data_Analytics_2022/Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
+NiwotRidge.litter <- 
+  read.csv("/Users/Laurel/Documents/Information to Keep/Graduate School/Second Year/Second Semester/Environmental Data Analytics/Environmental_Data_Analytics_2022/Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv", stringsAsFactors = TRUE)
+#2 
+PeterPaul.chem.physics$sampledate <- as.Date(PeterPaul.chem.physics$sampledate, format = "%Y-%m-%d")
+NiwotRidge.litter$collectDate <- as.Date(NiwotRidge.litter$collectDate, format = "%Y-%m-%d")
+```
+## Define your theme
+3. Build a theme and set it as your default theme.
+
+```{r}
+#3
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "right")
+theme_set(mytheme)
+```
+
+## Create graphs
+For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best practices for data visualization. Ensure your theme, color palettes, axes, and additional aesthetics are edited accordingly.
+
+4. [NTL-LTER] Plot total phosphorus (`tp_ug`) by phosphate (`po4`), with separate aesthetics for Peter and Paul lakes. Add a line of best fit and color it black. Adjust your axes to hide extreme values (hint: change the limits using `xlim()` and `ylim()`).
+
+```{r}
+#4
+PeterPaul.phosphorus.by.phosphate <- 
+  ggplot (PeterPaul.chem.physics, aes(x = po4, y = tp_ug, color = lakename)) +
+  geom_point() +
+  geom_smooth(method = lm, color = "black") +
+  xlim(0, 50) + 
+  ylim(0, 150) + 
+  labs(x = "Phosphate", y = "Phosphorus", color = "Lake Name")
+print(PeterPaul.phosphorus.by.phosphate)
+```
+
+
+5. [NTL-LTER] Make three separate boxplots of (a) temperature, (b) TP, and (c) TN, with month as the x axis and lake as a color aesthetic. Then, create a cowplot that combines the three graphs. Make sure that only one legend is present and that graph axes are aligned.
+
+```{r , fig.height = 10, fig.width = 10}
+#5
+PeterPaul.chem.physics$month <- as.factor(PeterPaul.chem.physics$month)
+
+Tempplot <-
+  ggplot(PeterPaul.chem.physics, aes(x = month, y = temperature_C)) + 
+  geom_boxplot(aes(color  = lakename)) + 
+  labs(x = "Month", y = "Temperature in Celsius", color = "Lake Name")
+print(Tempplot)
+
+TPplot <-
+  ggplot(PeterPaul.chem.physics, aes(x = month, y = tp_ug)) + 
+  geom_boxplot(aes(color  = lakename)) + 
+  labs(x = "Month", y = "Total Phosphorus", color = "Lake Name")
+print(TPplot)
+
+TNplot <-
+  ggplot(PeterPaul.chem.physics, aes(x = month, y = tn_ug)) + 
+  geom_boxplot(aes(color  = lakename)) + 
+  labs(x = "Month", y = "Total Nitrogen", color = "Lake Name")
+print(TNplot)
+
+Tempplot.axis <- Tempplot + theme(legend.position="none")
+TPplot.axis <- TPplot + theme(legend.position="none")
+TNplot.axis <- TNplot + theme(legend.position="none")
+
+no.legend <- plot_grid(Tempplot.axis, TPplot.axis, TNplot.axis, nrow = 3, align = 'v', axis = 'tb', rel_heights = c(1, 1, 1))
+
+legend <- get_legend(Tempplot)
+
+with.legend <- plot_grid(no.legend, legend, rel_widths = c(3, .4))
+with.legend
+```
+
+Question: What do you observe about the variables of interest over seasons and between lakes? 
+
+> Answer: Paul Lake is a little warmer than Peter Lake, Peter Lake has both more phosphorus and more nitrogren than Paul Lake, and there are higher nutrient levels in both lakes in the warm months.
+
+6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the "Needles" functional group. Plot the dry mass of needle litter by date and separate by NLCD class with a color aesthetic. (no need to adjust the name of each land use)
+
+7. [Niwot Ridge] Now, plot the same plot but with NLCD classes separated into three facets rather than separated by color. 
+
+```{r}
+#6
+Needles.mass <- ggplot(subset(NiwotRidge.litter, functionalGroup == "Needles"),
+                       aes(x = collectDate, y = dryMass)) +
+  geom_line(aes(color = nlcdClass)) + 
+  labs(x = "Collection Date", y = "Dry Mass", color = "NLCD Class")
+print(Needles.mass)
+#7
+Needles.mass.faceted <-
+  ggplot(subset(NiwotRidge.litter, functionalGroup == "Needles"),
+                       aes(x = collectDate, y = dryMass)) +
+  geom_line(aes(color = nlcdClass)) + 
+  facet_grid("nlcdClass") + 
+  labs(x = "Collection Date", y = "Dry Mass", color = "NLCD Class")
+print(Needles.mass.faceted)
+```
+Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
+
+> Answer: I think 7 is more effective because with 6, the lines are overlapping and hard to read, but 7 offers a clearer picture without the overlap.
