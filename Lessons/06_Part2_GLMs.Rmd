@@ -34,6 +34,12 @@ theme_set(mytheme)
 ### One-way ANOVA
 A one-way ANOVA is used when you have one categorical explanatory variable with more than two categories. In R, we can run the model with the function `lm` or `aov`, the latter of which will allow us to run post-hoc tests to determine pairwise differences.
 
+Use when you know the variance is the same and you want to check if the means are the same.
+
+Categorical variables are coded as factors.
+
+Always test for normality before you use ANOVA.  If you fail the normality test, could be because the dataset is too small.
+
 Does total litter biomass differ among sites at the Niwot Ridge LTER?
 ```{r}
 # Wrangle the data
@@ -89,6 +95,7 @@ plot(Litter.Totals.anova2)
 
 # Post-hoc test
 # TukeyHSD() computes Tukey Honest Significant Differences
+# Means aren't the same but puts variables with similar means in clusters
 TukeyHSD(Litter.Totals.anova)
 
 # Extract groupings for pairwise relationships
