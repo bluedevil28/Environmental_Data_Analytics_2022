@@ -158,6 +158,9 @@ Note that the decomposition can yield negative values when we apply a seasonal a
 
 Two types of trends may be present in our time series dataset: **monotonic/deterministic** or **stochastic**. Monotonic trends are a gradual shift over time that is consistent in direction, for example in response to land use change. 
 
+[[Deterministic = constant over time, stochastic = not constant over time/random]]
+[[Difference between stochastic trend and deterministic trend: deterministic trend is constant over time, stochastic keeps the same direction but changes slowly over time.]]
+
 A third type of trend we haven't talked about is the **step** trend, also known as a level shift. Step trends are a distinct shift at a given time point, for example in response to a policy being enacted. 
 
 
@@ -207,7 +210,6 @@ Specific tests for monotonic trend analysis are listed below, with assumptions a
 Specific test for stochastic trend analysis:
 
 * **Augmented Dickey Fuller**: no seasonality, non-parametric, missing data not allowed. Function: `adf.test()` (package: tseries)
-
 
 #### Example: monotonic trend analysis
 
