@@ -109,7 +109,7 @@ ggplot(Temp_BR_processed, aes(x = Date, y = Temperature_C)) +
   geom_line() +
   geom_smooth( method = lm )
 
-#Rainfall is stedady over time time, while temperature (Celsius) is increasing over time.
+#Rainfall is steady over time time, while temperature (Celsius) is increasing over time.
 
 ```
 
