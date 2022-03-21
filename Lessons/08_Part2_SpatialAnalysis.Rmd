@@ -118,18 +118,24 @@ mapView(counties_sf, zcol = "AWATER")
 ```{r read HUCs shapefile}
 #Read the shapefile into an sf dataframe named "huc8_sf"
 
+huc8_sf<- st_read('./Data/Spatial/NCHUC8.shp')
 
 #Reveal the columns
 
+colnames(huc8_sf)
 
 #Check the CRS
 
+st_crs(huc8_sf)
+#WGS 84 is the CRS
 
 #Examine some records
 
+head(huc8_sf)
 
 #View the data as a map, colored by the acreage in each
 
+huc8_by_acres <- ggplot(data=huc8_sf) + geom_sf(aes(fill = ACRES))
 
 ```
 
@@ -140,10 +146,14 @@ mapView(counties_sf, zcol = "AWATER")
 ```{r Select the Upper Neuse HUC 8}
 #Read the shapefile into an sf dataframe
 
-
+neuse <- st_read('./Data/Spatial/NCHUC8.shp') %>%
+  filter(SUBBASIN == 'Upper Neuse')
 
 #Create a map
 
+neuse_plot <- ggplot() +
+  geom_sf(data=huc8_sf,fill='orange') + 
+  geom_sf(data=neuse,fill='purple')
 
 ```
 
@@ -240,17 +250,28 @@ ggplot() +
 ```{r}
 #Compute HUC8 wind energy
 
-
-
+wind <- read.csv(
+  'https://raw.githubusercontent.com/ENV859/EnviroAtlasData/main/Wind_Energy.csv',
+  colClasses = c('HUC_12'='factor')) %>%
+  mutate(HUC_8 = substr(HUC_12,0,8)) %>%
+  group_by(HUC_8) %>% 
+  summarize(SumWindEnergy = sum(AvgWindEnergy))
 
 #Join to HUC_8 features
 
-
-
+huc8_sf_join = merge(x = huc8_sf,
+                     y = wind,
+                     by.x = 'HUC_8',
+                     by.y = 'HUC_8')
 
 #View the outputs
 
-
+ggplot(data=huc8_sf_join) + 
+  geom_sf(aes(fill=SumWindEnergy)) + 
+  labs(
+    title='Wind energy by HUC 8',
+    fill = 'MW/year'
+  )
 
 ```
 
@@ -294,7 +315,7 @@ mapview(state_sf)
 
 When grouping data above, you may have noticed warnings that "although coordinates are longitude/latitude, st_union assumes that they are planar". This gets us back to our conversation on projections.
 
-Recall that we have two basic categories of coordinate systems: **geographic**, where coordinates are measured in angles (e.g. degrees of latitude and longitude); and **projected**, where coordinates are measured in linear units (e.g. meters or feet). The former maps our features on a sphere, and the latter maps our features on a plane. And the process of migrating spherical coordinates to planar ones is call "projecting" - and it involves a lot of math as well as various assumptions about the shape of the Earth, which is not a perfect sphere.
+Recall that we have two basic categories of coordinate systems: **geographic**, where coordinates are measured in angles (e.g. degrees of latitude and longitude); and **projected**, where coordinates are measured in linear units (e.g. meters or feet). The former maps our features on a sphere, and the latter maps our features on a plane. And the process of migrating spherical coordinates to planar ones is called "projecting" - and it involves a lot of math as well as various assumptions about the shape of the Earth, which is not a perfect sphere.
 
 ### 3.2.2 Reasons to project data before doing spatial analysis
 
@@ -363,19 +384,24 @@ mapview(neuse_counties_sf, zcol='Area_m2')
 *Now you try*: Select the counties in the "Triangle" (Chatham, Durham, Orange, and Wake). Then select the HUC_8s that touch these counties. And finally, select the portions of the HUC_8s that occur within these counties.
 
 ```{r EXERCISE: Clipping}
-#Select the Triangle County from the 
+#Select the Triangle County from the sf_counties dataframe
 
+triangle_sf <- counties_sf_utm %>%
+  filter(NAME %in% c('Chatham','Durham','Orange','Wake'))
 
+mapview(triangle_sf)
 
-  
 #Grab the intersecting HUC_8s
 
-
+selected_HUCS <- huc8_sf_utm[triangle_sf,]
+mapview(selected_HUCS)
 
 #Intersect the HUC_8s
 
+clipped_HUCs <- huc8_sf_utm %>%
+  st_intersection(triangle_sf)
 
-
+mapview(clipped_HUCs)
 
 ```
 

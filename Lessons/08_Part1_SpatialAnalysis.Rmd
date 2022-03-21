@@ -60,7 +60,7 @@ These geometries represent features located in geographic space. (There are othe
 A **coordinate reference system** or **crs** includes the information used to reference the coordinates used in defining a geometry with actual geographic locations. These will be discussed more later. 
 
 ## 2.3 Simple feature: geometry + attributes + crs
-A **simple feature** is one geographic element along with it's attributes. In other words, it's a row in a dataframe when that dataframe includes a column for geometry. 
+A **simple feature** is one geographic element along with its attributes. In other words, it's a row in a dataframe when that dataframe includes a column for geometry. 
 
 ## 2.4 Spatial dataframe 
 A **spatial dataframe**, also referred to as **simple features** (or `sf`), **spatially enabled dataframe**, or **geodataframe** is a collection of simple features (geometry + attribute + crs) stored in the format of a dataframe. It inherits all the capabilities of a standard dataframe but also has spatial analysis capabilities. 
@@ -176,9 +176,9 @@ The "solution" to these issues involves creating a vast number of different coor
 
 1. A mathematical representation of the earth's shape, often constrained to a specific extent to enhance accuracy at that extent (at the cost of increased distortion away from that extent). These representations are referred to as the `datums`, `spheroids`, or `ellipsoids` of a specific coordinate reference system. 
 
-2. A coordinate system, defined by the units of measurement (either angular [degrees], or planar [meters or feet]), and the location of its origin. Projected coordinate systems tend to be more accurate at their origin, with distortion increasing as you move away; thus you'd want to select a coordinate reference system who's origin is closest to the features in your analysis. 
+2. A coordinate system, defined by the units of measurement (either angular [degrees], or planar [meters or feet]), and the location of its origin. Projected coordinate systems tend to be more accurate at their origin, with distortion increasing as you move away; thus you'd want to select a coordinate reference system whose origin is closest to the features in your analysis. 
 
-All simple features need to be associated with a defined coordinate reference system. The crs can be *geographic*, where coordinate values remain in angular units, or *project* where the angular units have been translated into planar ones using some form of projection method. The crs associated with the simple features provides critical information for processing spatial analyses such as computing distances, calculating areas, etc. It also enables datasets using one crs to be **transformed** into another crs so that analyses can be done across spatial datasets.  
+All simple features need to be associated with a defined coordinate reference system. The crs can be *geographic*, where coordinate values remain in angular units, or *projected* where the angular units have been translated into planar ones using some form of projection method. The crs associated with the simple features provides critical information for processing spatial analyses such as computing distances, calculating areas, etc. It also enables datasets using one crs to be **transformed** into another crs so that analyses can be done across spatial datasets.  
 
 
 ## 3.2  EPSG codes and "PROJ4Strings"
@@ -187,7 +187,7 @@ The "4326" in the `crs = 4326` is an EPSG code, a number used to look up a speci
 
 The website <http://spatialreference.org/> lists hundreds of standard CRS along with a map and description of where it's appropriate. For example, a useful one in North Carolina is [UTM Zone 17N-NAD 83](http://spatialreference.org/ref/epsg/nad83-utm-zone-17n/). Note also that its *EPSG code* is `26917`; this EPSG code one way we can assign a CRS to our data. If you click on the the "Well Known Text as HTML" link, it will reveal all the specific associated with that CRS... (Another site listing coordinate reference systems is <http://www.epsg.org/>)
 
-Some CRS, however, do not have an associated EPSG code, and for those, we can use the "proj4string", which is a long hand form of the projection information. Just to make it more confusing, some coordinate systems have a "WKT" or "Well known text" code.Mostly, these are all interchangeable and the important bit here is that you understand the need for and requirements of associating a CRS with a spatial dataset. I found this site gives a useful overview of the nuances of coordinate systems: <https://bit.ly/2XUGMyX>
+Some CRS, however, do not have an associated EPSG code, and for those, we can use the "proj4string", which is a long hand form of the projection information. Just to make it more confusing, some coordinate systems have a "WKT" or "Well known text" code.  Mostly, these are all interchangeable and the important bit here is that you understand the need for and requirements of associating a CRS with a spatial dataset. I found this site gives a useful overview of the nuances of coordinate systems: <https://bit.ly/2XUGMyX>
 
 ### 3.2.1 Some commonly used CRS
 
