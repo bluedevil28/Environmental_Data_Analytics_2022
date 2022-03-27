@@ -22,6 +22,9 @@ library(lubridate)
 #install.packages("rvest")
 library(rvest)
 
+library(purrr)
+library(stringr)
+
 # Set theme
 mytheme <- theme_classic() +
   theme(axis.text = element_text(color = "black"), 
@@ -90,7 +93,7 @@ The selector gadget tool is useful in identifying the internal ids of the elemen
 
 When successful, the box should display `.table tr:nth-child(1) td:nth-child(2)`. This uniquely identifies the html element containing the data we want. 
 
-With this id known, we can extract it's value in a two-step process. First we use `html_nodes()` to grab the element using its tag. Then we extract the value associated with that element text using the `html_text()` function. 
+With this id known, we can extract its value in a two-step process. First we use `html_nodes()` to grab the element using its tag. Then we extract the value associated with that element text using the `html_text()` function. 
 
 ```{r scrape.some.data}
 the_registrant <- webpage %>% 
@@ -142,7 +145,7 @@ df_withdrawals <- data.frame("Month" = rep(1:12),
 
 #Modify the dataframe to include the facility name and type as well as the date (as date object)
 df_withdrawals <- df_withdrawals %>% 
-  mutate(Registrant = !!the_registrant,
+  ::mutate(Registrant = !!the_registrant,
          Facility_name = !!the_facility_name,
          Facility_type = !!the_facility_type,
          Date = my(paste(Month,"-",Year)))
@@ -193,7 +196,7 @@ the_withdrawals <- the_website %>% html_nodes(the_data_tag) %>% html_text()
 df_withdrawals <- data.frame("Month" = rep(1:12),
                              "Year" = rep(the_year,12),
                              "Avg_Withdrawals_mgd" = as.numeric(the_withdrawals)) %>% 
-  mutate(Registrant = !!the_registrant,
+  dplyr::mutate(Registrant = !!the_registrant,
          Facility_name = !!the_facility_name,
          Facility_type = !!the_facility_type,
          Date = my(paste(Month,"-",Year)))
@@ -202,7 +205,7 @@ df_withdrawals <- data.frame("Month" = rep(1:12),
 ggplot(df_withdrawals,aes(x=Date,y=Avg_Withdrawals_mgd)) + 
   geom_line() + 
   geom_smooth(method="loess",se=FALSE) +
-  labs(title = paste("2020 Water usage data for",the_registrant),
+  labs(title = paste(the_year, "Water usage data for",the_registrant),
        subtitle = the_facility_name,
        y="Withdrawal (mgd)",
        x="Date")
@@ -239,7 +242,7 @@ scrape.it <- function(the_year, the_facility){
   df_withdrawals <- data.frame("Month" = rep(1:12),
                                "Year" = rep(the_year,12),
                                "Avg_Withdrawals_mgd" = as.numeric(avg_withdrawals)) %>% 
-    mutate(Registrant = !!the_registrant,
+    dplyr::mutate(Registrant = !!the_registrant,
            Facility_name = !!the_facility_name,
            Facility_type = !!the_facility_type,
            Date = my(paste(Month,"-",Year)))
@@ -276,6 +279,8 @@ the_dfs <- map(the_years,scrape.it,the_facility=my_facility)
 
 #Conflate the returned dataframes into a single dataframe
 the_df <- bind_rows(the_dfs)
+#THIS command did not work properly!  Use the other binding function instead?
+#Only brought in the year 2018
 
 #Plot, because it's fun and rewarding
 ggplot(the_df,aes(x=Date,y=Avg_Withdrawals_mgd)) + 
@@ -334,7 +339,7 @@ the_years <- rep.int(2020,length(the_facility_ids_subset))
 dfs_2020 <- map2(the_years, the_facility_ids_subset, scrape.it) 
 
 #Conflate the returned list of dataframes into a single one
-df_2020 <- bind_rows(dfs_2020)
+df_2020 <- dplyr::bind_rows(dfs_2020)
 
 
 #Plot
@@ -356,7 +361,7 @@ the_years = c(2018,2019,2020)
 #Then send apply our scrape.it function to grab values into a list of dataframes
 the_df <- cross2(the_years,the_facilities) %>% 
   map(lift(scrape.it)) %>% 
-  bind_rows()
+  dplyr::bind_rows()
 
 #Plot
 ggplot(the_df,aes(x=Date,y=Avg_Withdrawals_mgd,color=Facility_name)) + 
